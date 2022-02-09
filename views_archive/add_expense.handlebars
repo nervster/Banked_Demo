@@ -1,0 +1,23 @@
+<form action="/">
+        <div class="title">
+          <i class="fas fa-pencil-alt"></i> 
+          <h2>Register here</h2>
+        </div>
+        <div class="info">
+          <input class="fname" type="date" name="date" placeholder="Date" value="2022-02-01">
+          <input type="currency" name="amount_expense" placeholder="$ Amount" min = 0 step = .01>
+          <input type="text" name="expense_Description" placeholder="Short Expense Description">
+          {{!-- <input type="password" name="name" placeholder="Password"> --}}
+          <select>
+            <option value="expense-type" selected>Expense type*</option>
+            <option value="subscription">Subscription</option>
+            <option value="food_restaurants">Restaurants</option>
+            <option value="nightlife">Nightlife</option>
+            <option value="groceries">Groceries</option>
+          </select>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" name="checkbox"><span>I agree to the <a href="https://www.w3docs.com/privacy-policy">Privacy Poalicy for W3Docs.</a></span>
+        </div>
+        <button type="submit" href="/">Submit</button>
+      </form>
