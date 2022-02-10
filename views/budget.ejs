@@ -9,14 +9,29 @@
         <h3>After you feel like you have enough saved, you can send some of your budget over to an existing savings account aka "Bank! it"</h3>
         </div>
         <div class="info">
-        <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income" min = 0 step = .01>
-        <input type="currency" name="monthly_housing" id="monthly_housing" placeholder="$ Monthly Housing Expense" min = 0 step = .01>
-        <input type="currency" name="monthly_car" id="monthly_car" placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min = 0 step = .01>
-        <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions" placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min = 0 step = .01>
-        <input type="currency" name="monthly_other" id="monthly_other" placeholder="$ All other monthly expenses" min = 0 step = .01>
-        </div>
-        <button type="submit">Submit</button>
+        <% if (typeof monthly_income != "undefined") { %>
+            <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income" min = 0 step = .01 value= <%= monthly_income %> >
+            <input type="currency" name="monthly_housing" id="monthly_housing" placeholder="$ Monthly Housing Expense" min = 0 step = .01 value=<%= monthly_housing %>>
+            <input type="currency" name="monthly_car" id="monthly_car" placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min = 0 step = .01 value=<%= monthly_car %>>
+            <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions" placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min = 0 step = .01 value=<%= monthly_subscriptions %>>
+            <input type="currency" name="monthly_other" id="monthly_other" placeholder="$ All other monthly expenses" min = 0 step = .01 value=<%= monthly_other %>>
+            </div>
+            <button type="submit">Update</button>
+        <% } else { %>
+            <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income" min = 0 step = .01 >
+            <input type="currency" name="monthly_housing" id="monthly_housing" placeholder="$ Monthly Housing Expense" min = 0 step = .01>
+            <input type="currency" name="monthly_car" id="monthly_car" placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min = 0 step = .01>
+            <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions" placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min = 0 step = .01>
+            <input type="currency" name="monthly_other" id="monthly_other" placeholder="$ All other monthly expenses" min = 0 step = .01>
+            </div>
+            <button type="submit">Submit</button>
+        <% } %>
+        
     </form>
-<h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %></h2>
 
+<!-- <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %></h2> -->
+<% if (daily_allowance > 0) { %>
+    <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %></h2>
+    <a href="/">Home Page</a>
+    <%}%>
 </div>
