@@ -29,21 +29,36 @@ var getDaysInCurrentMonth = function() {
 
 app.get('/',function(req,res,next){
   var context = {};
+  var today = new Date();
   mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
     if(err){
       next(err);
       return;
     }
-    var today = new Date();
-    
+   
     context.results = JSON.parse(JSON.stringify(rows));
     var allowance_date = new Date(context.results[0].allowance_last_updated)
-    console.log((today - allowance_date)/ (1000 * 3600 * 24))
-    console.log(today)
-    console.log(allowance_date)
-    console.log(context)
+    num_days_last_update = Math.floor((today - allowance_date)/ (1000 * 3600 * 24))
+    if ( num_days_last_update > 1) {
+      context.results[0].current_allowance += context.results[0].daily_allowance * num_days_last_update
+
+      // update allowance table 
+      mysql.pool.query("UPDATE allowance set current_allowance = (?), allowance_last_updated = (?) where user_id = (?)", 
+      [context.results[0].current_allowance, today.toISOString().slice(0, 19).replace('T', ' '), current_user], 
+          function(err, result){
+          if(err){
+            next(err);
+            return;
+          }
+      console.log("Updated " + result.changedRows + " rows.");
+    });
+    }
+
     res.render('home', context);
   });
+
+
+
 });
 
 app.get('/expense',function(req,res,next){
@@ -61,7 +76,7 @@ app.get('/budget',function(req,res,next){
     var context = {"daily_allowance" : 0};
     
     let updateBudget = () =>
-      mysql.pool.query('SELECT * FROM budget where user_id = (?)', [current_user], function(err, rows, fields){
+      mysql.pool.query('SELECT * FROM budget where user_id = (?) and created_timestamp = (select max(created_timestamp) from budget where user_id = (?))', [current_user, current_user], function(err, rows, fields){
       if(err){
         next(err);
         return;
@@ -88,7 +103,6 @@ app.get('/budget',function(req,res,next){
 app.post('/budget',function(req,res,next){
 
     var context = {};
-    // mysql.connection.connect();
     
     let multipleRowInsert = () => {
   
@@ -130,17 +144,18 @@ app.post('/budget',function(req,res,next){
               next(err);
               return;
             }
-            context.results = "Updated " + result.changedRows + " rows.";
+            console.log("Updated " + result.changedRows + " rows.");
           });
         } else {
           var today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+          console.log("updated allowance date: " + today);
           mysql.pool.query(`INSERT INTO allowance (user_id, daily_allowance, current_allowance, allowance_last_updated, total_bank) VALUES (?,?,?,?,?);`, [current_user, daily_allowance,daily_allowance,today, 0.0], 
             function(err, result){
             if(err){
               next(err);
               return;
             }
-            context.results = "Inserted id " + result.insertId;
+            console.log("Inserted id " + result.insertId);
           });
         } ;
       });
