@@ -5,6 +5,7 @@ const ejsMate = require('ejs-mate');
 const bodyParser = require("body-parser");
 const { json } = require('body-parser');
 const { all } = require('express/lib/application');
+const url = require('url');
 // var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 // app.engine('handlebars', handlebars.engine);
 // app.set('view engine', 'handlebars');
@@ -27,7 +28,7 @@ var getDaysInCurrentMonth = function() {
 
   };
 
-app.get('/',function(req,res,next){
+app.get(['/','home'],function(req,res,next){
   var context = {};
   var today = new Date();
   mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
@@ -56,9 +57,48 @@ app.get('/',function(req,res,next){
 
     res.render('home', context);
   });
+});
+
+app.get('/login', function(req,res, next){
+  var context = {"auth": true};
+  if (req.query.auth == "failed") {
+    context.auth = false;
+  }
+  res.render('login', context);
+})
+
+app.post('/login', function(req,res, next){
+
+  // Send data to Drew's service
+  // Wait for response back
+  // check if true or false
+  // if true, redirect to homepage
+  // if false, alert user and ask them to try again
+
+  // temp solution
+
+  let checkUserAuth = (username, password) =>
+      mysql.pool.query('SELECT * FROM user_authentication where username = (?) and password = (?)', [username, password], function(err, rows, fields){
+      if(err){
+        next(err);
+        return;
+      }
+      if (rows.length > 0) {
+        res.redirect('/');
+      } else {
+        res.redirect(url.format({
+          pathname:"/login",
+          query: {
+             "auth": "failed"
+           }
+        }));
+      }
+      
+    });
 
 
-
+  checkUserAuth(req.body.username, req.body.password)
+  
 });
 
 app.get('/expense',function(req,res,next){
