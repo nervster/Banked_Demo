@@ -28,7 +28,7 @@ var getDaysInCurrentMonth = function() {
 
   };
 
-app.get(['/','home'],function(req,res,next){
+app.get(['/','/home'],function(req,res,next){
   var context = {};
   var today = new Date();
   mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
@@ -58,6 +58,53 @@ app.get(['/','home'],function(req,res,next){
     res.render('home', context);
   });
 });
+
+app.get('/bank',function(req,res,next){
+  var context = {};
+  mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
+    if(err){
+      next(err);
+      return;
+    }
+   
+    context.results = JSON.parse(JSON.stringify(rows));
+
+    res.render('bank', context);
+  });
+});
+
+app.post('/bank',function(req,res,next){
+  var context = {};
+  
+    mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
+      if(err){
+        next(err);
+        return;
+      }
+
+      results = JSON.parse(JSON.stringify(rows));
+
+      // TODO: Add conditional statements to validate amount sent
+      // send money to bank
+      // mysql.pool.query('UPDATE allowance set current_allowance = (?), total_bank = (?) where user_id = (?)"', [results[0].current_allowance - req.body.amount_bank, results[0].total_bank + req.body.amount_bank, current_user], function(err, result){
+      //   if(err){
+      //     next(err);
+      //     return;
+      //   }
+      //   console.log("Updated " + result.changedRows + " rows.");
+      // });
+    
+      if (req.body.amount_bank > 0) {
+        context.response = `Congrats! You successfully sent $${req.body.amount_bank} to your bank.`
+      } else {
+        context.response = `Congrats! You successfully retrieved $${req.body.amount_bank * -1} to your bank.`
+      }
+
+      res.render('bank', context);
+    });
+
+  });
+
 
 app.get('/login', function(req,res, next){
   var context = {"auth": true};
@@ -111,6 +158,46 @@ app.get('/expense',function(req,res,next){
       // context.results = JSON.stringify(rows);
       res.render('add_expense', context);
     });
+
+app.post('/expense',function(req, res, next) {
+  // console.log(req.body);
+  var context = {};
+  mysql.pool.query(`INSERT INTO expenses (date, user_id, amount, description, type) VALUES (?,?,?,?,?);`,
+  [req.body.date, current_user, req.body.amount_expense, req.body.expense_description, req.body.expense_type], 
+  function(err, result){
+    if(err) {
+      next(err);
+      return;
+    }
+    console.log("Inserted id " + result.insertId);
+
+    // get current allowance
+    mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
+      if(err){
+        next(err);
+        return;
+      }
+     
+      context.results = JSON.parse(JSON.stringify(rows));
+      context.updated_allowance = context.results[0].current_allowance - parseInt(req.body.amount_expense);
+
+        mysql.pool.query("UPDATE allowance set current_allowance = (?) where user_id = (?)", 
+        [context.updated_allowance, current_user], 
+            function(err, result){
+            if(err){
+              next(err);
+              return;
+            }
+        console.log("Updated " + result.changedRows + " rows.");
+        res.redirect('/');
+      });
+      
+    });
+    
+    
+  });
+
+});
 
 app.get('/budget',function(req,res,next){
     var context = {"daily_allowance" : 0};
@@ -221,6 +308,18 @@ app.get('/insert',function(req,res,next){
   });
 });
 
+app.get('/delete_expense',function(req,res,next){
+  var context = {};
+  mysql.pool.query("DELETE FROM expense WHERE id=?", [req.query.id], function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = "Deleted " + result.changedRows + " rows.";
+    res.redirect('/');
+  });
+});
+
 app.get('/delete',function(req,res,next){
   var context = {};
   mysql.pool.query("DELETE FROM todo WHERE id=?", [req.query.id], function(err, result){
@@ -271,6 +370,21 @@ app.get('/safe-update',function(req,res,next){
       });
     }
   });
+});
+
+app.get('/sort', function(req, res, next) {
+    console.log("hi");
+    console.log(req.body.data)
+    var sort_data = req.body.data
+    sort_data.sort();
+    console.log(sort_data)
+    res.json(sort_data);
+    if (req.body.order.toLowerCase() == 'desc') {
+      res.json({'sorted_data': sort_data.reverse()});
+    } else {
+      res.json({'sorted_data': sort_data});
+    }
+    next();
 });
 
 app.get('/reset-table',function(req,res,next){

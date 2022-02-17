@@ -4,10 +4,10 @@
       <h2>Add Expense:</h2>
     </div>
     <div class="info">
-      <input class="fname" type="date" name="date" placeholder="Date" value="2022-02-01">
-      <input type="currency" name="amount_expense" placeholder="$ Amount" min = 0 step = .01>
-      <input type="text" name="expense_description" placeholder="Short Expense Description">
-      <select>
+      <input class="fname" type="date" id = "expense_date" name="date" placeholder="Date" value="2022-02-01">
+      <input type="currency" name="amount_expense" id = "amount_expense" placeholder="$ Amount" min = 0 step = .01>
+      <input type="text" name="expense_description" id="expense_description" placeholder="Short Expense Description">
+      <select id="expense_type" name="expense_type">
         <option value="expense-type" selected>Expense type*</option>
         <option value="subscription">Subscription</option>
         <option value="food_restaurants">Restaurants</option>
