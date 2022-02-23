@@ -159,6 +159,18 @@ app.get('/expense',function(req,res,next){
       res.render('add_expense', context);
     });
 
+app.get('/view_expenses',function(req,res,next){
+  var context = {};
+  mysql.pool.query('SELECT * FROM expenses where user_id = ?',[current_user], function(err, rows, fields){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.parse(JSON.stringify(rows));
+    res.render('view_expenses', context);
+  });
+});
+
 app.post('/expense',function(req, res, next) {
   // console.log(req.body);
   var context = {};
@@ -308,15 +320,53 @@ app.get('/insert',function(req,res,next){
   });
 });
 
-app.get('/delete_expense',function(req,res,next){
+app.get('/delete_expense/:id',function(req,res,next){
   var context = {};
-  mysql.pool.query("DELETE FROM expense WHERE id=?", [req.query.id], function(err, result){
+  mysql.pool.query("DELETE FROM expenses WHERE id=?", [req.params.id], function(err, result){
     if(err){
-      next(err);
+      next(err);  
       return;
     }
     context.results = "Deleted " + result.changedRows + " rows.";
-    res.redirect('/');
+    console.log(req.query.amt);
+
+    mysql.pool.query("SELECT * from allowance where user_id = ?",[current_user], function(err, rows, field){
+      if (err) {
+        next(err);
+        return;
+      }
+      context.results_allowance = JSON.parse(JSON.stringify(rows));
+      context.updated_allowance = context.results_allowance[0].current_allowance + parseInt(req.query.amt);
+
+      mysql.pool.query("UPDATE allowance set current_allowance = (?) where user_id = (?)", 
+      [context.updated_allowance, current_user], 
+          function(err, result){
+          if(err){
+            next(err);
+            return;
+          }
+      console.log("Updated " + result.changedRows + " rows.");
+      res.redirect('/');
+
+
+    });
+
+    });
+    
+  });
+});
+
+app.get('/edit_expense/:id',function(req,res,next){
+  var context = {};
+
+    mysql.pool.query("SELECT * from expenses where id = ?",[req.params.id], function(err, rows, field){
+      if (err) {
+        next(err);
+        return;
+      }
+      context.results = JSON.parse(JSON.stringify(rows));
+      res.render('edit_expense', context)
+  
   });
 });
 
