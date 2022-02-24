@@ -1,7 +1,0 @@
-<% for(var i=0; i < results.length; i++) { %>
-    <div>
-        <ul><%= results[i].date.slice(0,10) %>    <%= results[i].type %>    $<%= results[i].amount %></ul>
-        <a href="/delete_expense/<%= results[i].id %>?amt=<%= results[i].amount %>">Delete Expense</a>
-        <a href="/edit_expense/<%= results[i].id %>">Edit Expense</a>
-    </div>
-<% } %>

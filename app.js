@@ -16,11 +16,13 @@ const current_user = 1
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.set('port', 3000);
+
 
 var getDaysInCurrentMonth = function() {
     var today = new Date()
@@ -28,7 +30,11 @@ var getDaysInCurrentMonth = function() {
 
   };
 
-app.get(['/','/home'],function(req,res,next){
+app.get('/', function(req,res,next) {
+  res.render('pages/landing');
+})
+
+app.get('/home',function(req,res,next){
   var context = {};
   var today = new Date();
   mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
@@ -55,7 +61,7 @@ app.get(['/','/home'],function(req,res,next){
     });
     }
 
-    res.render('home', context);
+    res.render('pages/home', context);
   });
 });
 
@@ -69,7 +75,7 @@ app.get('/bank',function(req,res,next){
    
     context.results = JSON.parse(JSON.stringify(rows));
 
-    res.render('bank', context);
+    res.render('pages/bank', context);
   });
 });
 
@@ -83,27 +89,38 @@ app.post('/bank',function(req,res,next){
       }
 
       results = JSON.parse(JSON.stringify(rows));
-
+      console.log(typeof req.body.amount_bank)
       // TODO: Add conditional statements to validate amount sent
       // send money to bank
-      // mysql.pool.query('UPDATE allowance set current_allowance = (?), total_bank = (?) where user_id = (?)"', [results[0].current_allowance - req.body.amount_bank, results[0].total_bank + req.body.amount_bank, current_user], function(err, result){
-      //   if(err){
-      //     next(err);
-      //     return;
-      //   }
-      //   console.log("Updated " + result.changedRows + " rows.");
-      // });
-    
-      if (req.body.amount_bank > 0) {
-        context.response = `Congrats! You successfully sent $${req.body.amount_bank} to your bank.`
-      } else {
-        context.response = `Congrats! You successfully retrieved $${req.body.amount_bank * -1} to your bank.`
-      }
+      mysql.pool.query('UPDATE allowance set current_allowance = (?), total_bank = (?) where user_id = (?)', [results[0].current_allowance - parseInt(req.body.amount_bank), results[0].total_bank + parseInt(req.body.amount_bank), current_user], function(err, result){
+        if(err){
+          next(err);
+          return;
+        }
+        console.log("Updated " + result.changedRows + " rows.");
+      });
 
-      res.render('bank', context);
+      context = {}
+
+      mysql.pool.query('SELECT * FROM allowance where user_id = (?) ORDER BY latest_timestamp desc',[current_user], function(err, rows, fields){
+        if(err){
+          next(err);
+          return;
+        }
+
+        if (req.body.amount_bank > 0) {
+          context.response = `Congrats! You successfully sent $${req.body.amount_bank} to your bank.`
+        } else {
+          context.response = `Congrats! You successfully retrieved $${req.body.amount_bank * -1} to your bank.`
+        }
+
+        results = JSON.parse(JSON.stringify(rows));
+      // res.redirect('/bank');
+      res.render('pages/bank', context);
     });
-
   });
+
+});
 
 
 app.get('/login', function(req,res, next){
@@ -111,7 +128,7 @@ app.get('/login', function(req,res, next){
   if (req.query.auth == "failed") {
     context.auth = false;
   }
-  res.render('login', context);
+  res.render('pages/login', context);
 })
 
 app.post('/login', function(req,res, next){
@@ -156,7 +173,7 @@ app.get('/expense',function(req,res,next){
   //       return;
   //     }
       // context.results = JSON.stringify(rows);
-      res.render('add_expense', context);
+      res.render('pages/add_expense', context);
     });
 
 app.get('/view_expenses',function(req,res,next){
@@ -167,7 +184,7 @@ app.get('/view_expenses',function(req,res,next){
       return;
     }
     context.results = JSON.parse(JSON.stringify(rows));
-    res.render('view_expenses', context);
+    res.render('pages/view_expenses', context);
   });
 });
 
@@ -201,7 +218,7 @@ app.post('/expense',function(req, res, next) {
               return;
             }
         console.log("Updated " + result.changedRows + " rows.");
-        res.redirect('/');
+        res.redirect('/home');
       });
       
     });
@@ -234,7 +251,7 @@ app.get('/budget',function(req,res,next){
       
       context.daily_allowance = budget/getDaysInCurrentMonth();
       delete context['_locals'];
-      res.render('budget', context)
+      res.render('pages/budget', context)
     });
     updateBudget();
     });
@@ -305,7 +322,7 @@ app.post('/budget',function(req,res,next){
     context.daily_allowance = daily_allowance / getDaysInCurrentMonth()
     updateAllowanceTable(context.daily_allowance);
     console.log(context)
-    res.render('budget', context);
+    res.render('pages/budget', context);
     });
 
 app.get('/insert',function(req,res,next){
@@ -316,7 +333,7 @@ app.get('/insert',function(req,res,next){
       return;
     }
     context.results = "Inserted id " + result.insertId;
-    res.render('home',context);
+    res.render('pages/home',context);
   });
 });
 
@@ -346,7 +363,7 @@ app.get('/delete_expense/:id',function(req,res,next){
             return;
           }
       console.log("Updated " + result.changedRows + " rows.");
-      res.redirect('/');
+      res.redirect('/home');
 
 
     });
@@ -365,7 +382,7 @@ app.get('/edit_expense/:id',function(req,res,next){
         return;
       }
       context.results = JSON.parse(JSON.stringify(rows));
-      res.render('edit_expense', context)
+      res.render('pages/edit_expense', context)
   
   });
 });
@@ -378,7 +395,7 @@ app.get('/delete',function(req,res,next){
       return;
     }
     context.results = "Deleted " + result.changedRows + " rows.";
-    res.render('home',context);
+    res.render('pages/home',context);
   });
 });
 
@@ -394,7 +411,7 @@ app.get('/simple-update',function(req,res,next){
       return;
     }
     context.results = "Updated " + result.changedRows + " rows.";
-    res.render('home',context);
+    res.render('pages/home',context);
   });
 });
 
@@ -416,7 +433,7 @@ app.get('/safe-update',function(req,res,next){
           return;
         }
         context.results = "Updated " + result.changedRows + " rows.";
-        res.render('home',context);
+        res.render('pages/home',context);
       });
     }
   });
@@ -447,20 +464,20 @@ app.get('/reset-table',function(req,res,next){
     "due DATE)";
     mysql.pool.query(createString, function(err){
       context.results = "Table reset";
-      res.render('home',context);
+      res.render('pages/home',context);
     })
   });
 });
 
 app.use(function(req,res){
   res.status(404);
-  res.render('404');
+  res.render('pages/404');
 });
 
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500);
-  res.render('500');
+  res.render('pages/500');
 });
 
 app.listen(app.get('port'), function(){

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include("../partials/header.ejs") %>
+</head>
+
+<body>
+  <%- include("../partials/navbar_user.ejs") %>
+
+    <form action="/edit_expense/<%=results[0].id %>" method="POST">
+      <div class="title">
+        <i class="fas fa-pencil-alt"></i>
+        <h2>Edit Expense:</h2>
+      </div>
+      <div class="info">
+        <input class="fname" type="date" id="expense_date" name="date" placeholder="Date"
+          value="<%= results[0].date.slice(0,10) %>">
+        <input type="currency" name="amount_expense" id="amount_expense" placeholder="$ Amount" min=0 step=.01
+          value="<%= results[0].amount %>">
+        <input type="text" name="expense_description" id="expense_description" placeholder="Short Expense Description"
+          value="<%= results[0].description %>">
+        <select id="expense_type" name="expense_type">
+          <option value="expense_type">Expense type*</option>
+          <option value="subscription">Subscription</option>
+          <option value="food_restaurants">Restaurants</option>
+          <option value="nightlife">Nightlife</option>
+          <option value="groceries">Groceries</option>
+        </select>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+</body>
+
+</html>

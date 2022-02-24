@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include("../partials/header.ejs") %>
+</head>
+
+<body>
+    <%- include("../partials/navbar_user.ejs") %>
+
+        <div class="jumbotron">
+            <form action="/budget" method="POST">
+                <div class="title">
+                    <i class="fas fa-pencil-alt"></i>
+                    <h2>Create Your Daily Allowance</h2>
+                    <h3>Your daily allowance is how much you are able to spend per day based on your income and fixed
+                        expenses.</h3>
+                    <h3>For example, if you make $2000 per month but you have $1000 of fixed expenses, then you can
+                        spend $33.33 per day.</h3>
+                    <h3>If you spend less than $33.33, then it will rollover into the next day. More you rollover, more
+                        budget you have to spend.</h3>
+                    <h3>After you feel like you have enough saved, you can send some of your budget over to an existing
+                        savings account aka "Bank! it"</h3>
+                </div>
+                <div class="info">
+                    <% if (typeof monthly_income !="undefined" ) { %>
+                        <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income"
+                            min=0 step=.01 value=<%=monthly_income %> >
+                        <input type="currency" name="monthly_housing" id="monthly_housing"
+                            placeholder="$ Monthly Housing Expense" min=0 step=.01 value=<%=monthly_housing %>>
+                        <input type="currency" name="monthly_car" id="monthly_car"
+                            placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min=0 step=.01
+                            value=<%=monthly_car %>>
+                        <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions"
+                            placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min=0 step=.01
+                            value=<%=monthly_subscriptions %>>
+                        <input type="currency" name="monthly_other" id="monthly_other"
+                            placeholder="$ All other monthly expenses" min=0 step=.01 value=<%=monthly_other %>>
+                </div>
+                <button type="submit">Update</button>
+                <% } else { %>
+                    <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income"
+                        min=0 step=.01>
+                    <input type="currency" name="monthly_housing" id="monthly_housing"
+                        placeholder="$ Monthly Housing Expense" min=0 step=.01>
+                    <input type="currency" name="monthly_car" id="monthly_car"
+                        placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min=0 step=.01>
+                    <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions"
+                        placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min=0 step=.01>
+                    <input type="currency" name="monthly_other" id="monthly_other"
+                        placeholder="$ All other monthly expenses" min=0 step=.01>
+        </div>
+        <button type="submit">Submit</button>
+        <% } %>
+
+            </form>
+
+            <!-- <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %></h2> -->
+            <% if (daily_allowance> 0) { %>
+                <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %>
+                </h2>
+                <%}%>
+                    </div>
+
+
+</body>
+
+</html>
