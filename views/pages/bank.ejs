@@ -8,45 +8,38 @@
 <body>
   <%- include("../partials/navbar_user.ejs") %>
 
-    <h1>Bank:</h1>
-
-    <h2>Total "Banked":</h2>
-
-
-    <% if (results.length> 0) {%>
-      <h3>This is what you have earned so far:</h3>
-      <ul>$<%=results[0].current_allowance.toFixed(2).padStart(5,'0') %>
-      </ul>
-      <h3></h3>
-      <h3>This is what you have saved so far:</h3>
-      <ul>$<%=results[0].total_bank.toFixed(2).padStart(5,'0') %>
-      </ul>
-      <% } else { %>
-        <ul>Please create budget to start using app</ul>
-        <%}%>
-          <p></p>
-          <p></p>
-          <form action="/bank" method="POST">
-            <div class="title">
-              <i class="fas fa-pencil-alt"></i>
-              <h2>Amount to send (+) or retrieve (-) from the bank:</h2>
-            </div>
-            <div class="info">
-              <input type="currency" name="amount_bank" placeholder="$ Amount" min="<%= results[0].total_bank * -1 %>"
-                max="<%= results[0].current_allowance %>" step=.01>
-            </div>
-            <button type="submit">Send/Retrieve to Bank</button>
-          </form>
-
-          <% if (typeof response !="undefined" ) { %>
-            <h3>
-              <%=response %>
-            </h3>
-            <% } %>
-
-
-              <a href="/home">Home</a>
-
+    <div class="container d-flex justify-content-center">
+      <h2>Your Piggy Bank:</h2>
+      <% if (results.length> 0) {%>
+        <h3>This is what you have earned so far:</h3>
+        <ul>$<%=results[0].current_allowance.toFixed(2).padStart(5,'0') %>
+        </ul>
+        <h3></h3>
+        <h3>This is what you have saved so far:</h3>
+        <ul>$<%=results[0].total_bank.toFixed(2).padStart(5,'0') %>
+        </ul>
+        <% } else { %>
+          <ul>Please create budget to start using app</ul>
+          <%}%>
+            <p></p>
+            <p></p>
+            <form action="/bank" method="POST">
+              <div class="form-group">
+                <label for="amount_bank">Amount to Send/Retrieve from your Piggy Bank:</label>
+                <input type="currency" class="form-control" id="amount_bank" name="amount_bank" placeholder="$ Amount" min="<%= results[0].total_bank * -1 %>"
+                  max="<%= results[0].current_allowance %>" step=.01>
+              </div>
+              <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+  
+            <% if (typeof response != "undefined" ) { %>
+              <h3>
+                <%= response %>
+              </h3>
+              <% } %>
+  
+    </div>
+    
 </body>
 
 </html>

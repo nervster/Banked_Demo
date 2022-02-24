@@ -8,9 +8,9 @@
 <body>
   <%- include("../partials/navbar.ejs") %>
 
-    <div class="container d-flex justify-content-center align-items-center mt-5">
-        <div class="row">
-            <div class="col-xl-4 offset-xl-4">
+    <div class="container d-flex h-100 justify-content-center align-items-center">
+        <div>
+            <div>
                 <div class="card shadow">
                     <div class="card-body">
                         <h5 class="card-title">Login</h5>
@@ -20,7 +20,7 @@
                                     Username and/or password is incorrect. Please try again.
                                   </div>
                             <%} %>
-                            <div class="mb-3">
+                            <div class="form-group">
                                 <label class="form-label" for="username">Username</label>
                                 <input class="form-control" type="text" id="username" name="username" autofocus required>
                                 <!-- <div class="valid-feedback">
@@ -28,14 +28,14 @@
                                 </div> -->
                             </div>
     
-                            <div class="mb-3">
+                            <div class="form-group>
                                 <label class="form-label" for="password">Password</label>
                                 <input class="form-control" type="password" id="password" name="password" required>
                                 <!-- <div class="valid-feedback">
                                     Looks good!
                                 </div> -->
                             </div>
-                            <button class="btn btn-success btn-block">Login (this will trigger Drew's service)</button>
+                            <button class="btn btn-success btn-block">Login</button>
                         </form>
                     </div>
                 </div>

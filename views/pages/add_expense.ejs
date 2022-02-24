@@ -8,25 +8,45 @@
 <body>
   <%- include("../partials/navbar_user.ejs") %>
 
-    <form action="/expense" method="POST">
-      <div class="title">
+  <div class="container d-flex justify-content-center">
+    <form action="/expense/" method="POST">
+      <div class="form-group">
         <i class="fas fa-pencil-alt"></i>
-        <h2>Add Expense:</h2>
+        <h2>Add An Expense:</h2>
       </div>
-      <div class="info">
-        <input class="fname" type="date" id="expense_date" name="date" placeholder="Date" value="2022-02-01">
-        <input type="currency" name="amount_expense" id="amount_expense" placeholder="$ Amount" min=0 step=.01>
-        <input type="text" name="expense_description" id="expense_description" placeholder="Short Expense Description">
-        <select id="expense_type" name="expense_type">
-          <option value="expense-type" selected>Expense type*</option>
+      <br>
+      <div class="form-group">
+        <label for="expense_date">Date:</label>
+        <input class="form-control" type="date" id="expense_date" name="date" placeholder="Date">
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="amount_expense">Expense Amount: </label>
+        <input class="form-control" type="currency" name="amount_expense" id="amount_expense" placeholder="$ Amount" min=0 step=.01>
+      </div>
+      <br>
+      <div>
+        <label for="expense_description">Short Description: </label>
+        <input class="form-control" type="text" name="expense_description" id="expense_description" placeholder="Short Expense Description">
+      </div>
+      <br>
+      <div>
+        <label for="expense_type">Expense Type: </label>
+        <select class="form-control" id="expense_type" name="expense_type">
           <option value="subscription">Subscription</option>
           <option value="food_restaurants">Restaurants</option>
           <option value="nightlife">Nightlife</option>
           <option value="groceries">Groceries</option>
+          <option value="other">Other</option>
         </select>
       </div>
-      <button type="submit">Submit</button>
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
+
+    
+
 
 </body>
 
