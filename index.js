@@ -10,7 +10,7 @@ const url = require('url');
 // app.engine('handlebars', handlebars.engine);
 // app.set('view engine', 'handlebars');
 const app = express();
-
+const PORT = process.env.PORT || 5000
 const current_user = 1
 
 //Here we are configuring express to use body-parser as middle-ware.
@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
-app.set('port', 3000);
+app.set('port', PORT);
 
 
 var getDaysInCurrentMonth = function() {
@@ -481,5 +481,5 @@ app.use(function(err, req, res, next){
 });
 
 app.listen(app.get('port'), function(){
-  console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
+  console.log('Express started on' + app.get('port') + '; press Ctrl-C to terminate.');
 });
