@@ -16,7 +16,7 @@ var pool = mysql.createPool({
   host            : 'piggybankdb.mysql.database.azure.com',
   user            : 'npsheth978@piggybankdb',
   password        : 'Nervster!1993',
-  database        : 'piggybankdb',
+  database        : 'pb',
   port            : 3306,
   // ssl             : {ca:fs.readFileSync({ca-cert filename})
 });
