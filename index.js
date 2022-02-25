@@ -44,22 +44,25 @@ app.get('/home',function(req,res,next){
     }
    
     context.results = JSON.parse(JSON.stringify(rows));
-    var allowance_date = new Date(context.results[0].allowance_last_updated)
-    num_days_last_update = Math.floor((today - allowance_date)/ (1000 * 3600 * 24))
-    if ( num_days_last_update > 1) {
-      context.results[0].current_allowance += context.results[0].daily_allowance * num_days_last_update
-
-      // update allowance table 
-      mysql.pool.query("UPDATE allowance set current_allowance = (?), allowance_last_updated = (?) where user_id = (?)", 
-      [context.results[0].current_allowance, today.toISOString().slice(0, 19).replace('T', ' '), current_user], 
-          function(err, result){
-          if(err){
-            next(err);
-            return;
-          }
-      console.log("Updated " + result.changedRows + " rows.");
-    });
+    if (context.results.length > 0) {
+      var allowance_date = new Date(context.results[0].allowance_last_updated)
+      num_days_last_update = Math.floor((today - allowance_date)/ (1000 * 3600 * 24))
+      if ( num_days_last_update > 1) {
+        context.results[0].current_allowance += context.results[0].daily_allowance * num_days_last_update
+  
+        // update allowance table 
+        mysql.pool.query("UPDATE allowance set current_allowance = (?), allowance_last_updated = (?) where user_id = (?)", 
+        [context.results[0].current_allowance, today.toISOString().slice(0, 19).replace('T', ' '), current_user], 
+            function(err, result){
+            if(err){
+              next(err);
+              return;
+            }
+        console.log("Updated " + result.changedRows + " rows.");
+      });
+      }
     }
+    
 
     res.render('pages/home', context);
   });
