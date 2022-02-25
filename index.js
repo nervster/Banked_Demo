@@ -151,7 +151,7 @@ app.post('/login', function(req,res, next){
         return;
       }
       if (rows.length > 0) {
-        res.redirect('/');
+        res.redirect('/home');
       } else {
         res.redirect(url.format({
           pathname:"/login",
