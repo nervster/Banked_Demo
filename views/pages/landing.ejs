@@ -3,17 +3,70 @@
     <head>
         <%- include("../partials/header.ejs") %>    
     </head>
-    <body>
+    <body id="page-top">
+
+
         <%- include("../partials/navbar.ejs") %>
     
-    <div>
-        <div id="landing-header" class="container d-flex flex-column justify-content-center">
-            <h1>Welcome to your Piggy Bank!</h1>
-           <h3>You work everyday so you can spend everyday</h3>
-           <a href="/login" class="btn btn-lg btn-success">Login</a>
-       </div>
-    </div>
-    
+   
+        <header class="masthead text-center text-white">
+            <div class="masthead-content">
+                <div class="container px-5">
+                    <h1 class="masthead-heading mb-0">Welcome to The Piggy Bank!</h1>
+                    <h4 class="masthead-subheading mb-0">Make saving fun and spending less guilty</h4>
+                    <a class="btn btn-primary btn-xl rounded-pill mt-5" href="#scroll">Learn More</a>
+                </div>
+            </div>
+        </header>
+        <!-- Content section 1-->
+        <section id="scroll">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6 order-lg-2">
+                        <div class="p-5"><img class="img-fluid rounded-circle" src="assets/budget.png" alt="..." /></div>
+                    </div>
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="p-5">
+                            <h2 class="display-4">Create your daily budget!</h2>
+                            <p>Use our simple budget form to create your daily budget. Your daily budget is the amount that of income that you generate per day after your fixed expenses like rent, subscriptions, and other monthly bills.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Content section 2-->
+        <section>
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6">
+                        <div class="p-5"><img class="img-fluid rounded-circle" src="assets/bank.png" alt="..." /></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <h2 class="display-4">The Piggy Bank!</h2>
+                            <p>Based on your daily budget, you can decide to spend or save that income. Whatever you decide, your remaining daily budget will rollover into your Piggy Bank.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Content section 3-->
+        <section>
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6 order-lg-2">
+                        <div class="p-5"><img class="img-fluid rounded-circle" src="assets/spend.jpg" alt="..." /></div>
+                    </div>
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="p-5">
+                            <h2 class="display-4">Track your expenses!</h2>
+                            <p>Input your expenses in the app to track your expenses and your Piggy Bank.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include("../partials/footer.ejs") %>    
 
     </body>
 </html>

@@ -8,26 +8,29 @@
 <body>
   <%- include("../partials/navbar_user.ejs") %>
 
+
+  <div class="container d-flex justify-content-center">
     <form action="/edit_expense/<%=results[0].id %>" method="POST">
-      <div class="title">
-        <i class="fas fa-pencil-alt"></i>
+      <div class="form-group">
+        
         <h2>Edit Expense:</h2>
       </div>
+      <br>
       <div class="form-group">
-        <label for="expense_date">Date: </label>
-        <input class="fname" type="date" id="expense_date" name="date" placeholder="Date"
-          value="<%= results[0].date.slice(0,10) %>">
+        <label for="expense_date">Date:</label>
+        <input class="form-control" type="date" id="expense_date" name="date" placeholder="Date" value="<%= results[0].date.slice(0,10) %>">
       </div>
+      <br>
       <div class="form-group">
         <label for="amount_expense">Expense Amount: </label>
-        <input type="currency" name="amount_expense" id="amount_expense" placeholder="$ Amount" min=0 step=.01
-        value="<%= results[0].amount %>">
+        <input class="form-control" type="currency" name="amount_expense" id="amount_expense" placeholder="$ Amount" min=0 step=.01 value="<%= results[0].amount %>">
       </div>
+      <br>
       <div>
         <label for="expense_description">Short Description: </label>
-        <input type="text" name="expense_description" id="expense_description" placeholder="Short Expense Description"
-        value="<%= results[0].description %>">
+        <input class="form-control" type="text" name="expense_description" id="expense_description" placeholder="Short Expense Description" value="<%= results[0].description %>">
       </div>
+      <br>
       <div>
         <label for="expense_type">Expense Type: </label>
         <select class="form-control" id="expense_type" name="expense_type">
@@ -38,9 +41,13 @@
           <option value="other">Other</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <br>
+      <button type="submit" class="btn btn-primary">Update</button>
     </form>
+  </div>
+<br>
 
+    <%- include("../partials/footer.ejs") %>
 </body>
 
 </html>

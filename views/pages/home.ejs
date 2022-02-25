@@ -8,24 +8,25 @@
 <body>
     <%- include("../partials/navbar_user.ejs") %>
 
-<div class="jumbotron">
-    <h1>Bank:</h1>
+        <div id="main_card" class="container-fluid card">
+            <div class="container d-flex justify-items-center">
+                <div class="flex-column">
+                    <h1>Your Piggy Bank Overview:</h1>
+                    <h2>Currently Saved:</h2>
+                    <div class="align-items-center">
+                        <% if (results.length < 1) {%>
+                            <ul>Please create budget to start using app</ul>
+                            <% } else { %>
+                                <ul>$<%=results[0].current_allowance.toFixed(2).padStart(5,'0') %>
+                                </ul>
+                                <h6>Daily Income:  $<%= results[0].daily_allowance.toFixed(2).padStart(5,'0') %> </h6>
+                                <%}%>
+                    </div>
+                </div>
+                
 
-    <h2>Current Allowance:</h2>
-
-    <h3>This is what you have earned so far:</h3>
-    <% if (results.length < 1) {%>
-        <ul>Please create budget to start using app</ul>
-        
-        <% } else { %>
-            <ul>$<%=results[0].current_allowance.toFixed(2).padStart(5,'0') %></ul>
-        <h6>You currently earn $<%= results[0].daily_allowance.toFixed(2).padStart(5,'0') %> per day!</h6>
-            <%}%>
-
-
-
-</div>
-    
+            </div>
+        </div>
 </body>
 
 </html>

@@ -8,60 +8,166 @@
 <body>
     <%- include("../partials/navbar_user.ejs") %>
 
-        <div class="jumbotron">
-            <form action="/budget" method="POST">
+        <div class="container" style="padding-top: 50px;">
+            <div class="container d-flex h-100 justify-content-center align-items-center col">
                 <div class="title">
-                    <i class="fas fa-pencil-alt"></i>
-                    <h2>Create Your Daily Allowance</h2>
-                    <h3>Your daily allowance is how much you are able to spend per day based on your income and fixed
-                        expenses.</h3>
-                    <h3>For example, if you make $2000 per month but you have $1000 of fixed expenses, then you can
-                        spend $33.33 per day.</h3>
-                    <h3>If you spend less than $33.33, then it will rollover into the next day. More you rollover, more
-                        budget you have to spend.</h3>
-                    <h3>After you feel like you have enough saved, you can send some of your budget over to an existing
-                        savings account aka "Bank! it"</h3>
+
+                    <h2>Create Your Daily Budget!</h2>
+                    <h6>Your daily allowance is how much you are able to spend per day based on your after-tax income and fixed expenses.</h6>
+                    <h6>If you make $1,000 after fixed expenses per month, then you make an estimated $33.33 per day. Whatever you have left over at the end of the day will rollover to the next day.</h6>
+                    <h6>After you feel like you have enough saved, you can send your saved income over to your savings account aka "Bank! it"</h6>
+                    <h6>We will start by creating our daily budget:</h6>
                 </div>
-                <div class="info">
-                    <% if (typeof monthly_income !="undefined" ) { %>
-                        <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income"
-                            min=0 step=.01 value=<%=monthly_income %> >
-                        <input type="currency" name="monthly_housing" id="monthly_housing"
-                            placeholder="$ Monthly Housing Expense" min=0 step=.01 value=<%=monthly_housing %>>
-                        <input type="currency" name="monthly_car" id="monthly_car"
-                            placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min=0 step=.01
-                            value=<%=monthly_car %>>
-                        <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions"
-                            placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min=0 step=.01
-                            value=<%=monthly_subscriptions %>>
-                        <input type="currency" name="monthly_other" id="monthly_other"
-                            placeholder="$ All other monthly expenses" min=0 step=.01 value=<%=monthly_other %>>
+            </div>
+            <div class="container d-flex h-100 justify-content-center align-items-center col">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <h5 class="card-title">Monthly Budget</h5>
+                        <form action="/budget" method="POST" class="validated-form" novalidate>
+                            <% if (typeof monthly_income !="undefined" ) { %>
+                                <div class="form-group">
+                                    <label class="form-label" for="monthly_income">Monthly Income:</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="number" class="form-control" name="monthly_income" id="monthly_income"
+                                            placeholder="$ Monthly Income" min=0 step=.01 value=<%=monthly_income %> autofocus required>
+                                    </div>
+                                </div>
+                                    
+                                    
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="monthly_housing">Monthly Housing Expenses:</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="number" class="form-control" name="monthly_housing"
+                                        id="monthly_housing" placeholder="$ Monthly Housing Expenses" min=0 step=.01
+                                        value=<%=monthly_housing %> autofocus required>
+                                    </div> 
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="monthly_car">Monthly Car/Transportation
+                                        Expenses:</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" class="form-control" name="monthly_car" id="monthly_car"
+                                        placeholder="$ Monthly Income" min=0 step=.01 value=<%=monthly_car %> autofocus required>
+                                        </div> 
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="form-label" for="monthly_subscriptions">Monthly Car/Transportation
+                                        Expenses:</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" class="form-control" name="monthly_subscriptions"
+                                            id="monthly_subscriptions" placeholder="$ Monthly Subscriptions" min=0 step=.01
+                                            value=<%=monthly_subscriptions %> autofocus required>
+                                        </div> 
+                                    
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="monthly_other">Other Monthly Expenses:</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="number" class="form-control" name="monthly_other" id="monthly_other"
+                                        placeholder="$ Other Expenses" min=0 step=.01 value=<%=monthly_other %> autofocus required>
+                                    </div>      
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-block">Update</button>
+                                <% } else { %>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="monthly_income">Monthly Income:</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" class="form-control" name="monthly_income" id="monthly_income"
+                                                placeholder="$ Monthly Income" min=0 step=.01 autofocus required>
+                                        </div>
+                                    </div>
+                                        
+                                        
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="monthly_housing">Monthly Housing Expenses:</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" class="form-control" name="monthly_housing"
+                                            id="monthly_housing" placeholder="$ Monthly Housing Expenses" min=0 step=.01 autofocus required>
+                                        </div> 
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label class="form-label" for="monthly_car">Monthly Car/Transportation
+                                            Expenses:</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">$</span>
+                                                </div>
+                                                <input type="number" class="form-control" name="monthly_car" id="monthly_car"
+                                            placeholder="$ Monthly Income" min=0 step=.01 autofocus required>
+                                            </div> 
+                                    </div>
+    
+    
+                                    <div class="form-group">
+                                        <label class="form-label" for="monthly_subscriptions">Monthly Car/Transportation
+                                            Expenses:</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">$</span>
+                                                </div>
+                                                <input type="number" class="form-control" name="monthly_subscriptions"
+                                                id="monthly_subscriptions" placeholder="$ Monthly Subscriptions" min=0 step=.01 autofocus required>
+                                            </div> 
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="monthly_other">Other Monthly Expenses:</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" class="form-control" name="monthly_other" id="monthly_other"
+                                            placeholder="$ Other Expenses" min=0 step=.01 autofocus required>
+                                        </div>      
+                                    </div>
+                    <br>    
+                    <button type="submit" class="btn btn-success btn-block">Submit</button>
+                    <% } %>
+
+                        </form>
+
                 </div>
-                <button type="submit">Update</button>
-                <% } else { %>
-                    <input type="currency" name="monthly_income" id="monthly_income" placeholder="$ Monthly Income"
-                        min=0 step=.01>
-                    <input type="currency" name="monthly_housing" id="monthly_housing"
-                        placeholder="$ Monthly Housing Expense" min=0 step=.01>
-                    <input type="currency" name="monthly_car" id="monthly_car"
-                        placeholder="$ Monthly Car Expenses (insurance, car payments, etc)" min=0 step=.01>
-                    <input type="currency" name="monthly_subscriptions" id="monthly_subscriptions"
-                        placeholder="$ Monthly Subscription Services (Netflix, HBO, Disney, etc)" min=0 step=.01>
-                    <input type="currency" name="monthly_other" id="monthly_other"
-                        placeholder="$ All other monthly expenses" min=0 step=.01>
-        </div>
-        <button type="submit">Submit</button>
-        <% } %>
+                <div class="container">
+                    <!-- <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %></h2> -->
+                    <% if (daily_allowance> 0) { %>
+                        <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %>
+                        </h2>
+                        <%}%>
 
-            </form>
 
-            <!-- <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %></h2> -->
-            <% if (daily_allowance> 0) { %>
-                <h2>Daily Allowance based on Budget: $<%= daily_allowance.toFixed(2).padStart(5,'0') %>
-                </h2>
-                <%}%>
-                    </div>
+                </div>
 
+
+            </div>
 
 </body>
 
