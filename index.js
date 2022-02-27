@@ -442,7 +442,7 @@ app.get('/safe-update',function(req,res,next){
   });
 });
 
-app.get('/sort', function(req, res, next) {
+app.post('/sort', function(req, res, next) {
     console.log("hi");
     console.log(req.body.data)
     var sort_data = req.body.data
