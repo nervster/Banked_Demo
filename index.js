@@ -140,8 +140,8 @@ app.post('/login', function (req, res, next) {
 
   // Send data to Drew's service
   axios
-    .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=MyApp&username=testuser&password=testpassword`)
-    // .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=piggyBank&username=${req.body.username}&password=${req.body.password}`)
+    // .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=MyApp&username=testuser&password=testpassword`)
+    .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=MyApp&username=${req.body.username}&password=${req.body.password}`)
     .then(result => {
       console.log(`Login statusCode: ${result.status}`)
       // console.log(res)
