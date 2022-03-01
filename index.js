@@ -478,18 +478,45 @@ app.get('/safe-update', function (req, res, next) {
 });
 
 app.post('/sort', function (req, res, next) {
-  console.log("hi");
-  console.log(req.body.data)
+  
+  // console.log(req.body.data)
   var sort_data = req.body.data
-  sort_data.sort();
-  console.log(sort_data)
-  res.json(sort_data);
+  console.log("sort_num called: " + sort_data)
+  if (req.body.order.toLowerCase() == 'desc') {
+    res.json({ 'sorted_data': sort_data.sort(function(a, b){return b - a}) });
+  } else {
+    res.json({ 'sorted_data': sort_data.sort(function(a, b){return a - b}) });
+  }
+  
+});
+
+app.post('/sort_num', function (req, res, next) {
+  
+  // console.log(req.body.data)
+  var sort_data = req.body.data
+  console.log("sort_num called: " + sort_data)
+  if (req.body.order.toLowerCase() == 'desc') {
+    res.json({ 'sorted_data': sort_data.sort(function(a, b){return b - a}) });
+  } else {
+    res.json({ 'sorted_data': sort_data.sort(function(a, b){return a - b}) });
+  }
+  
+});
+
+app.post('/sort_string', function (req, res, next) {
+  
+  // console.log(req.body.data)
+  var sort_data = req.body.data
+  
+  console.log("sort_string called: " + sort_data)
+  sort_data.sort()
+  // console.log(sort_data)
   if (req.body.order.toLowerCase() == 'desc') {
     res.json({ 'sorted_data': sort_data.reverse() });
   } else {
     res.json({ 'sorted_data': sort_data });
   }
-  next();
+  
 });
 
 app.get('/reset-table', function (req, res, next) {
