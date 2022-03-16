@@ -136,12 +136,21 @@ app.get('/login', function (req, res, next) {
   res.render('pages/login', context);
 })
 
+app.get('/signup', function (req, res, next) {
+  var context = { "auth": true };
+
+  if (req.query.auth == "failed") {
+    context.auth = false;
+  }
+  res.render('pages/signup', context);
+})
+
 app.post('/login', function (req, res, next) {
 
   // Send data to Drew's service
   axios
     // .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=MyApp&username=testuser&password=testpassword`)
-    .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=MyApp&username=${req.body.username}&password=${req.body.password}`)
+    .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=PiggyBank&username=${req.body.username}&password=${req.body.password}`)
     .then(result => {
       console.log(`Login statusCode: ${result.status}`)
       // console.log(res)
@@ -172,36 +181,42 @@ app.post('/login', function (req, res, next) {
     })
 });
 
-// Wait for response back
-// check if true or false
-// if true, redirect to homepage
-// if false, alert user and ask them to try again
+app.post('/signup', function (req, res, next) {
 
-// temp solution
+  // Send data to Drew's service
+  axios
+    // .get(`https://vaultapp.azurewebsites.net/Auth/Authorize?title=MyApp&username=testuser&password=testpassword`)
+    .get(`https://vaultapp.azurewebsites.net/Add/Add?title=PiggyBank&username=${req.body.username}&password=${req.body.password}`)
+    .then(result => {
+      console.log(`Login statusCode: ${result.status}`)
+      // console.log(res)
+      if (result.status == 200) {
+        current_user = req.body.username
+        console.log(req.body.username)
+        res.redirect('/home')
+      } else {
+        res.redirect(url.format({
+          pathname: "/signup",
+          query: {
+            "auth": "failed"
+          }
+        }));
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      console.error("Login Error Status Code: " + error.response.status)
+      // if (error.response.status  '404') {
+      res.redirect(url.format({
+        pathname: "/signup",
+        query: {
+          "auth": "failed"
+        }
+      }));
 
-// let checkUserAuth = (username, password) =>
-//     mysql.pool.query('SELECT * FROM user_authentication where username = (?) and password = (?)', [username, password], function(err, rows, fields){
-//     if(err){
-//       next(err);
-//       return;
-//     }
-//     if (rows.length > 0) {
+    })
+});
 
-//     } else {
-//       res.redirect(url.format({
-//         pathname:"/login",
-//         query: {
-//            "auth": "failed"
-//          }
-//       }));
-//     }
-
-//   });
-
-
-// checkUserAuth(req.body.username, req.body.password)
-
-// });
 
 app.get('/expense', function (req, res, next) {
   var context = {};

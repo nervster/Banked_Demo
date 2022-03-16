@@ -13,7 +13,7 @@
         <div class="flex-column">
             <h1>Your Savings Account Overview:</h1>
             <div class="align-items-center">
-              <% if (results.length> 0) {%>
+              <% if (results.length > 0) {%>
                 <div class="container-fluid">
                   <h3>Your Piggy Bank Balance:</h3>
                   <ul>$<%=results[0].current_allowance.toFixed(2).padStart(5,'0') %></ul>
@@ -23,13 +23,15 @@
                   <ul>Please create budget to start using app</ul>
                 </div>
                 <%}%>
-            
+              <% if (results.length > 0) {%>
                 <div class="container-fluid">
                  
                   <h3>Your Savings Account Balance:</h3>
                   <ul>$<%=results[0].total_bank.toFixed(2).padStart(5,'0') %>
                   </ul>
                 </div>
+                <% } %>
+
                 <div class="container-fluid">
 
                       <form action="/bank" method="POST">
@@ -39,9 +41,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
+                            <% if (results.length > 0) {%>
                             <input type="number" class="form-control" id="amount_bank" name="amount_bank" placeholder="$ Amount" min="<%= results[0].total_bank * -1 %>"
                             max="<%= results[0].current_allowance %>" step=.01 autofocus required>
-                            
+                            <% }  else { %>
+                              <input type="number" class="form-control" id="amount_bank" name="amount_bank" placeholder="$ Amount" min=0
+                              max=0 step=.01 autofocus required>
+                              <%}%>
+
                         </div> 
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
