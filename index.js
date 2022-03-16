@@ -136,6 +136,11 @@ app.get('/login', function (req, res, next) {
   res.render('pages/login', context);
 })
 
+app.get('/signout', function (req, res, next) {
+  current_user = ''
+  res.redirect('/')
+})
+
 app.get('/signup', function (req, res, next) {
   var context = { "auth": true };
 
