@@ -449,59 +449,8 @@ app.get('/delete', function (req, res, next) {
 });
 
 
-///simple-update?id=2&name=The+Task&done=false&due=2015-12-5
-app.get('/simple-update', function (req, res, next) {
-  var context = {};
-  mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
-    [req.query.name, req.query.done, req.query.due, req.query.id],
-    function (err, result) {
-      if (err) {
-        next(err);
-        return;
-      }
-      context.results = "Updated " + result.changedRows + " rows.";
-      res.render('pages/home', context);
-    });
-});
-
-///safe-update?id=1&name=The+Task&done=false
-app.get('/safe-update', function (req, res, next) {
-  var context = {};
-  mysql.pool.query("SELECT * FROM todo WHERE id=?", [req.query.id], function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    if (result.length == 1) {
-      var curVals = result[0];
-      mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
-        [req.query.name || curVals.name, req.query.done || curVals.done, req.query.due || curVals.due, req.query.id],
-        function (err, result) {
-          if (err) {
-            next(err);
-            return;
-          }
-          context.results = "Updated " + result.changedRows + " rows.";
-          res.render('pages/home', context);
-        });
-    }
-  });
-});
 
 app.post('/sort', function (req, res, next) {
-  
-  // console.log(req.body.data)
-  var sort_data = req.body.data
-  console.log("sort_num called: " + sort_data)
-  if (req.body.order.toLowerCase() == 'desc') {
-    res.json({ 'sorted_data': sort_data.sort(function(a, b){return b - a}) });
-  } else {
-    res.json({ 'sorted_data': sort_data.sort(function(a, b){return a - b}) });
-  }
-  
-});
-
-app.post('/sort_num', function (req, res, next) {
   
   // console.log(req.body.data)
   var sort_data = req.body.data
@@ -530,20 +479,6 @@ app.post('/sort_string', function (req, res, next) {
   
 });
 
-app.get('/reset-table', function (req, res, next) {
-  var context = {};
-  mysql.pool.query("DROP TABLE IF EXISTS todo", function (err) {
-    var createString = "CREATE TABLE todo(" +
-      "id INT PRIMARY KEY AUTO_INCREMENT," +
-      "name VARCHAR(255) NOT NULL," +
-      "done BOOLEAN," +
-      "due DATE)";
-    mysql.pool.query(createString, function (err) {
-      context.results = "Table reset";
-      res.render('pages/home', context);
-    })
-  });
-});
 
 app.use(function (req, res) {
   res.status(404);
