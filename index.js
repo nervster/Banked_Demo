@@ -7,9 +7,6 @@ const { json } = require('body-parser');
 const { all } = require('express/lib/application');
 const url = require('url');
 const axios = require('axios')
-// var handlebars = require('express-handlebars').create({defaultLayout:'main'});
-// app.engine('handlebars', handlebars.engine);
-// app.set('view engine', 'handlebars');
 const app = express();
 const PORT = process.env.PORT || 5000
 var current_user = ''
@@ -225,12 +222,6 @@ app.post('/signup', function (req, res, next) {
 
 app.get('/expense', function (req, res, next) {
   var context = {};
-  //   mysql.pool.query('SELECT * FROM todo', function(err, rows, fields){
-  //     if(err){
-  //       next(err);
-  //       return;
-  //     }
-  // context.results = JSON.stringify(rows);
   res.render('pages/add_expense', context);
 });
 
